@@ -1,0 +1,19 @@
+function flatten(oldArr) {
+  var newArr = [];
+  for (var i = 0; i < oldArr.length; i++) {
+    if (Array.isArray(oldArr[i])) {
+      newArr = newArr.concat(flatten(oldArr[i]));
+    } else {
+      newArr.push(oldArr[i]);
+    }
+  }
+  return newArr;
+}
+
+console.log('-----Text 1 -----\n', flatten([1, 2, 3, [4, 5]])); // [1, 2, 3, 4, 5]
+console.log('-----Text 2 -----\n', flatten([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
+console.log('-----Text 3 -----\n', flatten([[1], [2], [3]])); // [1,2,3]
+console.log(
+  '-----Text 4 -----\n',
+  flatten([[[[1], [[[2]]], [[[[[[[3]]]]]]]]]])
+); // [1,2,3
