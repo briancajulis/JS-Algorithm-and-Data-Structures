@@ -1,7 +1,7 @@
 class Node {
   constructor(val) {
     this.val = val;
-    this.next = null;
+    this.next = next;
   }
 }
 
@@ -12,7 +12,7 @@ class SinglyLinkedList {
     this.length = 0;
   }
 
-  // Adds node to the end of list
+  // Adds node to end of the list
   push(val) {
     let newNode = new Node(val);
     if (!this.head) {
@@ -26,11 +26,12 @@ class SinglyLinkedList {
     return this;
   }
 
-  // Removes node at the end of the list
+  // removes node at the end of the list
   pop() {
     if (!this.head) return undefined;
     let current = this.head;
     let prev = current;
+
     while (current.next) {
       prev = current;
       current = current.next;
@@ -39,18 +40,35 @@ class SinglyLinkedList {
     this.tail.next = null;
     this.length--;
     if (this.length === 0) {
-      this.head = 0;
-      this.tail = 0;
+      this.head = null;
+      this.tail = null;
     }
     return current;
   }
 
-  // Remove node at the beginning
+  // add node to the beginning of the list
+  unshift(val) {
+    if (!this.head) return undefined;
+    let newNode = new Node(val);
+    if (this.length === 0) {
+      this.push(val);
+    } else {
+      newNode.next = this.head;
+      this.head = newNode;
+    }
+    this.length++;
+    return this;
+  }
+
+  // remove the beginning node of the list
   shift() {
     if (!this.head) return undefined;
-    let currentHead = this.head;
-    this.head = currentHead.next;
-    currentHead.next = null;
+    if (this.length === 1) {
+      this.pop();
+    } else {
+      let currentHead = this.head;
+      this.head = currentHead.next;
+    }
     this.length--;
     if (this.length === 0) {
       this.head = null;
@@ -59,29 +77,19 @@ class SinglyLinkedList {
     return currentHead;
   }
 
-  // Add node to the beginning
-  unshift(val) {
-    if (!this.head) return this.push(val);
-    let newNode = new Node(val);
-    newNode.next = this.head;
-    this.head = newNode;
-    this.length++;
-    return newNode;
-  }
-
-  // Retreive a node from the specified index
+  // retreive node at specified index
   get(index) {
     if (index < 0 || index >= this.length) return null;
     let counter = 0;
-    let current = this.head;
+    let currentNode = this.head;
     while (counter !== index) {
-      current = current.next;
       counter++;
+      currentNode = currentNode.next;
     }
-    return current;
+    return currentNode;
   }
 
-  // Change the value of a node based on it's position
+  // changes the value of the node at a the specified index
   set(index, val) {
     let foundNode = this.get(index);
     if (foundNode) {
@@ -91,44 +99,41 @@ class SinglyLinkedList {
     return false;
   }
 
-  // Add a node at a specified position
+  // add a node at a specified index
   insert(index, val) {
     if (index < 0 || index > this.length) return false;
     if (index === 0) {
       this.unshift(val);
       return true;
-    }
-    if (index === this.length) {
+    } else if (index === this.length) {
       this.push(val);
       return true;
     }
-
-    let prevNode = this.get(index - 1);
     let newNode = new Node(val);
+    let prevNode = this.get(index - 1);
     newNode.next = prevNode.next;
     prevNode.next = newNode;
     this.length++;
     return true;
   }
 
-  // deletes a node at a specified position
+  // remove node at a spcecified index
   remove(index) {
     if (index < 0 || index >= this.length) return undefined;
+    if (index === 0) return this.shift();
     if (index === this.length - 1) return this.pop();
-    if (index === 0) return this.unshift();
+    let removedNode = this.get(index);
     let prevNode = this.get(index - 1);
-    let removeNode = this.get(index);
-    prevNode.next = removeNode.next;
-    removeNode.next = null;
+    prevNode.next = removedNode.next;
     this.length--;
     if (this.length === 0) {
       this.head = null;
       this.tail = null;
     }
-    return removeNode;
+    return removedNode;
   }
 
-  // reverse the list order
+  // reverse order of the list
   reverse() {
     let node = this.head;
     this.head = this.tail;
